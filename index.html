@@ -38,17 +38,22 @@
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            transition: transform 0.1s;
+            transition: all 0.2s;
         }
         #yesBtn {
             background-color: #2ecc71;
             color: white;
         }
+        #yesBtn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
         #noBtn {
             background-color: #e74c3c;
             color: white;
         }
-        button:hover {
+        button:hover:not(:disabled) {
             transform: scale(1.05);
         }
         #message {
@@ -60,9 +65,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Would you go on a date with me Romana?</h1>
+        <h1>Would you go on a date with me?</h1>
         <div class="button-container">
-            <button id="yesBtn">Yes</button>
+            <button id="yesBtn" disabled>Yes</button>
             <button id="noBtn">No</button>
         </div>
         <div id="message"></div>
@@ -81,10 +86,14 @@
             noBtn.style.position = 'fixed';
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
+            
+            // Enable the Yes button after No is clicked/touched
+            yesBtn.disabled = false;
         }
 
         // Mouse events for desktop
         noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('click', moveButton);
 
         // Touch events for mobile
         noBtn.addEventListener('touchstart', function(e) {
@@ -92,17 +101,17 @@
             moveButton();
         });
 
-        yesBtn.addEventListener('click', showMessage);
-        yesBtn.addEventListener('touchend', function(e) {
-            e.preventDefault(); // Prevent default touch behavior
-            showMessage();
-        });
-
         function showMessage() {
             message.innerHTML = "Thank you for accepting!<br>Meet you tomorrow at 11 West Street London EC75 6XD<br>Bye bye";
             noBtn.style.display = 'none';
             yesBtn.style.display = 'none';
         }
+
+        yesBtn.addEventListener('click', showMessage);
+        yesBtn.addEventListener('touchend', function(e) {
+            e.preventDefault(); // Prevent default touch behavior
+            showMessage();
+        });
     </script>
 </body>
 </html>
