@@ -77,8 +77,13 @@
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const message = document.getElementById('message');
+        let noBtnInteracted = false;
 
         function moveButton() {
+            if (!noBtnInteracted) {
+                noBtnInteracted = true;
+                yesBtn.disabled = false;
+            }
             const maxX = window.innerWidth - noBtn.offsetWidth;
             const maxY = window.innerHeight - noBtn.offsetHeight;
             const randomX = Math.floor(Math.random() * maxX);
@@ -86,9 +91,16 @@
             noBtn.style.position = 'fixed';
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
-            
-            // Enable the Yes button after No is clicked/touched
-            yesBtn.disabled = false;
+        }
+
+        function showMessage(e) {
+            if (yesBtn.disabled) {
+                e.preventDefault();
+                return;
+            }
+            message.innerHTML = "Thank you for accepting!<br>Meet you tomorrow at 11 West Street London EC75 6XD<br>Bye bye";
+            noBtn.style.display = 'none';
+            yesBtn.style.display = 'none';
         }
 
         // Mouse events for desktop
@@ -97,20 +109,15 @@
 
         // Touch events for mobile
         noBtn.addEventListener('touchstart', function(e) {
-            e.preventDefault(); // Prevent default touch behavior
+            e.preventDefault();
             moveButton();
         });
 
-        function showMessage() {
-            message.innerHTML = "Thank you for accepting!<br>Meet you tomorrow at 11 West Street London EC75 6XD<br>Bye bye";
-            noBtn.style.display = 'none';
-            yesBtn.style.display = 'none';
-        }
-
+        // Yes button events
         yesBtn.addEventListener('click', showMessage);
         yesBtn.addEventListener('touchend', function(e) {
-            e.preventDefault(); // Prevent default touch behavior
-            showMessage();
+            e.preventDefault();
+            showMessage(e);
         });
     </script>
 </body>
